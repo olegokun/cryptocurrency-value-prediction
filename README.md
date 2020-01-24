@@ -1,5 +1,5 @@
-### Cryptocurrency Value Prediction
- Cryptocurrency value prediction with LSTM neural networks
+# Cryptocurrency Value Prediction
+*Cryptocurrency value prediction with LSTM neural networks*
  
 This project aims to explore cryptocurrency value prediction with Long Short-Term Memory (LSTM) neural networks. The prediction problem is posed as time-series prediction where past (historic) data serve for LSTM model training while a trained model performs predictions one-period (say, one week) ahead of the current date. Many implementations of time-series prediction output only a point prediction, i.e., one number, while ignoring uncertainty inherent in point estimates. I decided to add the prediction interval for each predicted value. 
 
