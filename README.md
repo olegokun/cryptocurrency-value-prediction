@@ -1,4 +1,4 @@
-![Bitcoin](https://pixabay.com/photos/bitcoin-cryptocurrency-digital-2007769/)
+![Bitcoins](https://cdn.pixabay.com/photo/2017/01/25/12/31/bitcoin-2007769__340.jpg)
 
 # Cryptocurrency Value Prediction
 *Cryptocurrency value prediction with LSTM neural networks*
