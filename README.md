@@ -9,6 +9,6 @@ This project is built on the works of other people as code reusing is more optim
 
 To be done!
 1. Definition of prediction interval
-2. Explaining code in notebook and results
-3. Add code where both predictions and their prediction intervals are computed by one model instead of three models
+2. Explain code in notebook, crypto.env settings and results
+3. Add a notebook where both predictions and their prediction intervals are computed by one model instead of three models
 4. Add code of dockerized app 
