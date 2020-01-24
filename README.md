@@ -12,13 +12,13 @@ Many implementations of time-series prediction output only a point prediction, i
 
 In other words, a prediction interval could be treated as a simplified estimate of the variability of predictions. This interval is defined by its lower and upper bounds. As a result, in addition to the prediction of the base model, there are two more predictions of lower and upper bounds of the prediction interval.
 
-[Quantile regression](https://en.wikipedia.org/wiki/Quantile_regression) allows one to estimate all three values for each date point. In this setting, the base model, predicting the cryptocurrency price, esimates the conditional median (50% quantile), whereas two other models estimate 5% and 95% quantiles of the response variable. We can assume, for example, that the 5% and 95% quantiles define the lower and upper bound of the prediction interval. Thus, in the most straightforward approach, one needs to train three LSTM models on the **same** training data. However, each model relies on its own loss function!
+[Quantile regression](https://en.wikipedia.org/wiki/Quantile_regression) allows one to estimate all three values for each date point. In this setting, the base model, predicting the cryptocurrency price, esimates the conditional median (50% quantile), whereas two other models estimate 5% and 95% quantiles of the response variable. We can assume, for example, that the 5% and 95% quantiles define the lower and upper bounds of the prediction interval. Thus, in the most straightforward approach, one needs to train three LSTM models on the **same** training data. However, each model relies on its own loss function!
 
 ## *Quantile regression: three LSTM models*
 Explain code in notebook, crypto.env settings and results
 
 This project is built on the works of other people as code reusing is more optimal than writing everything from scratch. I will acknowledge their work later on this page by providing necessary links.
 
-## *Quantile regression: single LSTM model*
+## *Quantile regression: single LSTM model with three outputs*
 
 ## *Dockerized app*
