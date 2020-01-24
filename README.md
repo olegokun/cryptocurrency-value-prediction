@@ -22,3 +22,4 @@ This project is built on the works of other people as code reusing is more optim
 ## *Quantile regression: single LSTM model with three outputs*
 
 ## *Dockerized app*
+Once, LSTM model(s) has (have) beed trained and model object(s) has (have) been saved in a file or files, we can use the trained model(s) in our dockerized app.
