@@ -5,8 +5,9 @@ from datetime import datetime, timedelta
 
 from keras.models import load_model
 from keras.models import Sequential
+from keras.models import Model as Functional_Model
 from keras.layers.recurrent import LSTM
-from keras.layers.core import Dense, Activation
+from keras.layers import Dense, Activation, Input
 
 from cryptonic.models.helper import ModelHelper
 from cryptonic.models.normalizations import point_relative_normalization
@@ -42,13 +43,17 @@ class Model(ModelHelper):
 
     """
     def __init__(self, data, variable, predicted_period_size, path=None, 
-                 holdout=0, normalize=True):
+                 holdout=0, normalize=True, model_type='sequential'):
 
         self.path = path
         self.data = data
         self.variable = variable
         self.predicted_period_size = predicted_period_size
         self.holdout = holdout
+        if model_type in ['sequential', 'functional']:
+            self.model_type=model_type
+        else:
+            raise ValueError('Wrong model type: It can be either "sequential" or "functional"')
 
         if path:
             self.model = load_model(self.path)
@@ -138,18 +143,30 @@ class Model(ModelHelper):
         """
         if not number_of_periods:
             number_of_periods = self.default_number_of_periods
-
-        self.model = Sequential()
-        self.model.add(LSTM(
-            units=period_length,
-            batch_input_shape=(batch_size, number_of_periods, period_length),
-            input_shape=(number_of_periods, period_length),
-            return_sequences=False, stateful=False))
-
-        self.model.add(Dense(units=period_length))
-        self.model.add(Activation("linear"))
-
-        self.model.compile(loss=loss, optimizer="rmsprop")
+            
+        if self.model_type == 'sequential':
+            self.model = Sequential()
+            self.model.add(LSTM(
+                units=period_length,
+                batch_input_shape=(batch_size, number_of_periods, period_length),
+                input_shape=(number_of_periods, period_length),
+                return_sequences=False, stateful=False))
+    
+            self.model.add(Dense(units=period_length))
+            self.model.add(Activation("linear"))
+    
+            self.model.compile(loss=loss, optimizer="rmsprop")
+        else:
+            input = Input(shape=(number_of_periods, period_length))
+            x = LSTM(units=period_length,
+                     batch_input_shape=(batch_size, number_of_periods, period_length),
+                     input_shape=(number_of_periods, period_length),
+                     return_sequences=False, stateful=False)(input)
+            x0 = Dense(units=period_length, activation='linear')(x)
+            x1 = Dense(units=period_length, activation='linear')(x)
+            x2 = Dense(units=period_length, activation='linear')(x)
+            self.model = Functional_Model(input, [x0, x1, x2])
+            self.model.compile(loss=loss, optimizer="rmsprop")
 
         return self.model
 
@@ -165,12 +182,15 @@ class Model(ModelHelper):
         """
         return self.model.save(path)
     
-    def predict(self, denormalized=False, return_dict=False):
+    def predict(self, output=None, denormalized=False, return_dict=False):
         """
         Makes a prediction based on input data.
 
         Parameters
         ----------
+        output: int, default None
+            Output index in a multi-output model.
+            It is unused in a single-output model
         denormalized: bool, default True
             If method should denormalize data. Method
             will use the normalizations.point_relative_normalization()
@@ -181,7 +201,11 @@ class Model(ModelHelper):
             results with dates as keys.
 
         """
-        predictions = self.model.predict(x=self.X)
+        if self.model_type == 'sequential':
+            predictions = self.model.predict(x=self.X)
+        else:
+            predictions = self.model.predict(x=self.X)[output]
+        
         if denormalized:
             predictions = point_relative_normalization(series=predictions, 
                                                        reverse=True, 
@@ -232,11 +256,17 @@ class Model(ModelHelper):
             self.data = data
             self.X, self.Y = self.__prepare_data(normalize=self.normalize)
             self.__extract_last_series_value()
-
-        self.train_history = self.model.fit(
-            x=self.X, y=self.Y,
-            batch_size=1, epochs=epochs,
-            verbose=verbose, shuffle=False)
+            
+        if self.model_type == 'sequential':
+            self.train_history = self.model.fit(
+                x=self.X, y=self.Y,
+                batch_size=1, epochs=epochs,
+                verbose=verbose, shuffle=False)
+        else:
+            self.train_history = self.model.fit(
+                x=self.X, y=[self.Y, self.Y, self.Y],
+                batch_size=1, epochs=epochs,
+                verbose=verbose, shuffle=False)
 
         self.last_trained = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         return self.train_history
