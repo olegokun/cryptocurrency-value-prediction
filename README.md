@@ -27,7 +27,15 @@ The first comment implies that unlike [confidence intervals](https://en.wikipedi
 
 The second comment implies that in case of the 50% or 0.5 quantile one could define the loss function as a text string instead of a function call.
 
-My implementation can be found in the *Activity_11_Training_a_model_extended* notebook. Such a weird name came after reading another source of inspiration for this project -- the book "[Beginning Application Development with TensorFlow and Keras](https://www.packtpub.com/application-development/beginning-application-development-tensorflow-and-keras-elearning-video)" written by Luis Capelo (his code is hosted on [GitHub](https://github.com/TrainingByPackt/Beginning-Application-Development-with-TensorFlow-and-Keras)). In his book, Luis arranged code into Jupyter notebooks each titled "Activity", and there are 9 such notebooks. Thus, I continued numbering but skipped uploading the 10th notebook here as it is not essential. I adopted Luis' code and modified it according my needs. The code can be found in the folder *criptonic*. Subfolders *markets* and *models* refer to the code implementing cryptocurrency data reading from the external source ([Coinmarketcap](https://coinmarketcap.com/) on the web and the code for model building, training and prediction, respectively.
+My implementation can be found in the *Activity_11_Training_a_model_extended* notebook. Such a weird name came after reading another source of inspiration for this project -- the book "[Beginning Application Development with TensorFlow and Keras](https://www.packtpub.com/application-development/beginning-application-development-tensorflow-and-keras-elearning-video)" written by Luis Capelo (his code is hosted on [GitHub](https://github.com/TrainingByPackt/Beginning-Application-Development-with-TensorFlow-and-Keras)). In his book, Luis arranged code into Jupyter notebooks each titled "Activity", and there are 9 such notebooks. Thus, I continued numbering but skipped uploading the 10th notebook here as it is not essential. I adopted Luis' code and modified it according my needs. The code can be found in the folder *criptonic*. Subfolders *markets* and *models* refer to the code implementing cryptocurrency data reading from the external source ([CoinMarketCap](https://coinmarketcap.com/) on the web and the code for model building, training and prediction, respectively. My additions are mainly in the file *model.py*.
+
+Useful constants are defined in the file *crypto.env*.
+* COIN_TYPE=bitcoin
+* COIN_START_DATE=2017-01-01
+* MODEL_NAME=${COIN_TYPE}_model_prod_v0.h5
+* EPOCHS=300
+* PERIOD_SIZE=7
+* WEEKS_BACK=40
 
 Explain code in notebook, crypto.env settings and results
 
