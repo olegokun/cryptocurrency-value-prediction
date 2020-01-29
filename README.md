@@ -41,10 +41,12 @@ Useful constants are defined in the file *crypto.env*. These are:
 
 A model consists of one LSTM and one Dense layers. Its implementation is based on Keras Sequential API, which is reflected in the default value of one *Model* class variable (*model_type*).
 
-The output consists of two plots (1. historic cryptocurrency prices + predicted ones without prediction intervals and 2. just predicted prices with prediction intervals) and a table showing the predicted price and the prediction interval for each day.
+The notebook output consists of two plots (1. historic cryptocurrency prices + predicted ones without prediction intervals and 2. just predicted prices with prediction intervals) and a table showing the predicted price and the prediction interval for each day.
 
 ## *Quantile regression: single LSTM model with three outputs*
-The alternative to using three models is to rely on Keras Functional API, which is very handy when one needs to deal with multiple inputs or/and multiple outputs. In our case, there is one input and three outputs. A new notebook - *Activity_12_Training_a_model_extended* - contains code implementing this scenario.
+The alternative to using three models is to rely on Keras Functional API, which is very handy when one needs to deal with multiple inputs or/and multiple outputs. In our case, there is one input and three outputs. A new notebook - *Activity_12_Training_a_model_extended* - contains code implementing this scenario. The *Model* class variable *model_type* needs to be explicitly set to "functional". Each of the three model outputs are associated with its own loss function.
+
+The notebook output includes the same items as the *Activity_11_...* notebook.
 
 ## *Dockerized app*
 Once, LSTM model(s) has (have) beed trained and model object(s) has (have) been saved in a file or files, we can use the trained model(s) in our dockerized app.
