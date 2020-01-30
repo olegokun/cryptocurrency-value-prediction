@@ -12,6 +12,19 @@ from keras.layers import Dense, Activation, Input
 from cryptonic.models.helper import ModelHelper
 from cryptonic.models.normalizations import point_relative_normalization
 
+import keras.backend as K
+
+def tilted_loss(q):
+    def loss(y, f):
+        """
+        q: quantile,
+        y: true value,
+        f: predicted value
+        """
+
+        e = (y - f)
+        return K.mean(K.maximum(q*e, (q-1)*e), axis=-1)
+    return loss
 
 class Model(ModelHelper):
     """
@@ -42,6 +55,7 @@ class Model(ModelHelper):
         training set.
 
     """
+    
     def __init__(self, data, variable, predicted_period_size, path=None, 
                  holdout=0, normalize=True, model_type='sequential'):
 
@@ -56,7 +70,8 @@ class Model(ModelHelper):
             raise ValueError('Wrong model type: It can be either "sequential" or "functional"')
 
         if path:
-            self.model = load_model(self.path)
+            self.model = load_model(self.path, 
+                                    custom_objects={'loss': tilted_loss(0.5)})
 
         self.X, self.Y = self.__prepare_data(normalize=normalize)
         self.__extract_last_series_value()
