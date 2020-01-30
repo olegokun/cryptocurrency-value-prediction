@@ -1,3 +1,5 @@
+<meta name='keywords' content='LSTM, Keras, Flask, cryptocurrency price prediction, time series prediction'>
+  
 ![Bitcoins](https://cdn.pixabay.com/photo/2017/01/25/12/31/bitcoin-2007769__340.jpg)
 
 # Cryptocurrency Price Prediction
