@@ -1,3 +1,5 @@
+<meta name='keywords' content='LSTM, Keras, Flask, cryptocurrency price prediction, time series prediction'>
+  
 ![Bitcoins](https://cdn.pixabay.com/photo/2017/01/25/12/31/bitcoin-2007769__340.jpg)
 
 # Cryptocurrency Price Prediction
@@ -27,7 +29,7 @@ The first comment implies that unlike [confidence intervals](https://en.wikipedi
 
 The second comment implies that in case of the 50% or 0.5 quantile one could define the loss function as a text string instead of a function call.
 
-My implementation can be found in the *Activity_11_Training_a_model_extended* notebook. Such a weird name came after reading another source of inspiration for this project -- the book "[Beginning Application Development with TensorFlow and Keras](https://www.packtpub.com/application-development/beginning-application-development-tensorflow-and-keras-elearning-video)" written by Luis Capelo (his code is hosted on [GitHub](https://github.com/TrainingByPackt/Beginning-Application-Development-with-TensorFlow-and-Keras)). In his book, Luis arranged code into Jupyter notebooks each titled "Activity", and there are 9 such notebooks. Thus, I continued numbering but skipped uploading the 10th notebook here as it is not essential. I adopted Luis' code and modified it according my needs. The code can be found in the folder *criptonic*. Subfolders *markets* and *models* refer to the code implementing cryptocurrency data reading from the external source ([CoinMarketCap](https://coinmarketcap.com/)) on the web and the code for model building, training and prediction, respectively. My additions are mainly in the file *model.py*.
+My implementation can be found in the *Activity_11_Training_a_model_extended* notebook. Such a weird name came after reading another source of inspiration for this project -- the book "[Beginning Application Development with TensorFlow and Keras](https://www.packtpub.com/application-development/beginning-application-development-tensorflow-and-keras-elearning-video)" written by Luis Capelo (his code is hosted [here](https://github.com/TrainingByPackt/Beginning-Application-Development-with-TensorFlow-and-Keras)). In his book, Luis arranged code into Jupyter notebooks each titled "Activity", and there are 9 such notebooks. Thus, I continued numbering but skipped uploading the 10th notebook here as it is not essential. I adopted Luis' code and modified it according my needs. The code can be found in the folder *criptonic*. Subfolders *markets* and *models* refer to the code implementing cryptocurrency data reading from the external source ([CoinMarketCap](https://coinmarketcap.com/)) on the web and the code for model building, training and prediction, respectively. My additions are mainly in the file *model.py*.
 
 Useful constants are defined in the file *crypto.env*. These are:
 
@@ -41,10 +43,16 @@ Useful constants are defined in the file *crypto.env*. These are:
 
 A model consists of one LSTM and one Dense layers. Its implementation is based on Keras Sequential API, which is reflected in the default value of one *Model* class variable (*model_type*).
 
-The output consists of two plots (1. historic cryptocurrency prices + predicted ones without prediction intervals and 2. just predicted prices with prediction intervals) and a table showing the predicted price and the prediction interval for each day.
+The notebook output consists of two plots (1. historic cryptocurrency prices + predicted ones without prediction intervals and 2. just predicted prices with prediction intervals) and a table showing the predicted price and the prediction interval for each day.
+
+Three trained models are saved in .h5 files with "suffixes" "lower", "median" and "upper", respectively.
 
 ## *Quantile regression: single LSTM model with three outputs*
-The alternative to using three models is to rely onb the Keras Functional API, which is very handy when one needs to deal with multiple inputs or/and multiple outputs. In our case, there is one input and three outputs.
+The alternative to using three models is to rely on Keras Functional API, which is very handy when one needs to deal with multiple inputs or/and multiple outputs. In our case, there is one input and three outputs. A new notebook - *Activity_12_Training_a_model_extended* - contains code implementing this scenario. The *Model* class variable *model_type* needs to be explicitly set to "functional". Each of the three model outputs are associated with its own loss function.
 
-## *Dockerized app*
-Once, LSTM model(s) has (have) beed trained and model object(s) has (have) been saved in a file or files, we can use the trained model(s) in our dockerized app.
+The notebook output includes the same items as the *Activity_11_...* notebook. The trained model is saved in a .h5 file according to *MODEL_NAME* value from the *crypto.env* file.
+
+## *Dockerized app: Docker+Keras+Flask*
+Once, LSTM model(s) has (have) beed trained and model object(s) has (have) been saved in a file or files, we can use the trained model(s) in our dockerized app. I developed a dockerized application relying on one model rather than three models.
+
+The [Keras blog](https://blog.keras.io/building-a-simple-keras-deep-learning-rest-api.html) contains an example of combining Keras and Flask APIs in one application.
