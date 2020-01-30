@@ -72,4 +72,6 @@ The notebook output includes the same items as the *Activity_11_...* notebook. T
 ## *Dockerized app: Docker+Keras+Flask*
 Once, LSTM model(s) has (have) beed trained and model object(s) has (have) been saved in a file or files, we can use the trained model(s) in our dockerized app. I developed a dockerized application relying on one model rather than three models.
 
-The [Keras blog](https://blog.keras.io/building-a-simple-keras-deep-learning-rest-api.html) contains an example of combining Keras and Flask APIs in one application (see *app.py*).
+The [Keras blog](https://blog.keras.io/building-a-simple-keras-deep-learning-rest-api.html) contains an example of combining Keras and Flask APIs in one application. I based my dockerized app on this example (see *app.py*).
+
+load_model(.h5, custome_objects={'loss':tilted_loss(0.5)})
