@@ -50,6 +50,22 @@ Three trained models are saved in .h5 files with "suffixes" "lower", "median" an
 ## *Quantile regression: single LSTM model with three outputs*
 The alternative to using three models is to rely on Keras Functional API, which is very handy when one needs to deal with multiple inputs or/and multiple outputs. In our case, there is one input and three outputs. A new notebook - *Activity_12_Training_a_model_extended* - contains code implementing this scenario. The *Model* class variable *model_type* needs to be explicitly set to "functional". Each of the three model outputs are associated with its own loss function.
 
+As we use 
+
+import keras.backend as K
+
+def tilted_loss(q):
+    def loss(y, f):
+        """
+        q: quantile,
+        y: true value,
+        f: predicted value
+        """
+
+        e = (y - f)
+        return K.mean(K.maximum(q*e, (q-1)*e), axis=-1)
+    return loss
+
 The notebook output includes the same items as the *Activity_11_...* notebook. The trained model is saved in a .h5 file according to *MODEL_NAME* value from the *crypto.env* file.
 
 ## *Dockerized app: Docker+Keras+Flask*
