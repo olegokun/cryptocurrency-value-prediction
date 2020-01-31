@@ -1,4 +1,4 @@
-<meta name='keywords' content='LSTM, Keras, Flask, cryptocurrency price prediction, time series prediction'>
+<meta name='keywords' content='LSTM, Keras, Flask, cryptocurrency price prediction, time series prediction, quantile regression'>
   
 ![Bitcoins](https://cdn.pixabay.com/photo/2017/01/25/12/31/bitcoin-2007769__340.jpg)
 
@@ -72,6 +72,10 @@ The notebook output includes the same items as the *Activity_11_...* notebook. T
 ## *Dockerized app: Docker+Keras+Flask*
 Once, LSTM model(s) has (have) beed trained and model object(s) has (have) been saved in a file or files, we can use the trained model(s) in our dockerized app. I developed a dockerized application relying on one model rather than three models.
 
-The [Keras blog](https://blog.keras.io/building-a-simple-keras-deep-learning-rest-api.html) contains an example of combining Keras and Flask APIs in one application. I based my dockerized app on this example (see *app.py*).
+The [Keras blog](https://blog.keras.io/building-a-simple-keras-deep-learning-rest-api.html) contains an example of combining Keras and Flask APIs in one application. My dockerized app follows guidelines of this example (see *app.py*).
+
+One rather tricky problem I faced and solved was a custom loss function with extra arguments. Above I demonstrated how the loss function should look like (arguments, except for true and predicted values, need to be delegated to a wrapper loss external function, such as *tilted_loss*, whereas the internal loss function only accepts the true and predicted values as in case of the built-in loss functions that could, for example, be specified via a text string such 'mse'). The internal loss function does all work while the wrapper loss function just returns the loss value. Such a structure requires special care when loading a trained model from a .h5 file. In addition to the name of such a file, the *custom_objects* parameter needs to be given as follows:
 
 load_model(.h5, custome_objects={'loss':tilted_loss(0.5)})
+
+The output is week-ahead predictions of prices together with the predictive interval for each price in the JSON format and a graph plotting historic and future cryptocurrency prices, which is the same graph as the one in case of Jupyter notebooks.
